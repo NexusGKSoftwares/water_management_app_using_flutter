@@ -34,30 +34,81 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         title: const Text('Pure Drops Water'),
         backgroundColor: Colors.blueAccent,
       ),
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.water),
-            label: 'Usage',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.payment),
-            label: 'Bills',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _screens[_selectedIndex],
+      ),
+      bottomNavigationBar: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(height: 60.0, color: const Color.fromARGB(255, 0, 0, 240)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(4, (index) {
+              return GestureDetector(
+                onTap: () => _onItemTapped(index),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _getIconForIndex(index),
+                      color: _selectedIndex == index
+                          ? Colors.white
+                          : Colors.white70,
+                    ),
+                    SizedBox(height: 4),
+                    if (_selectedIndex == index) ...[
+                      ClipPath(
+                        clipper: HalfCircleClipper(),
+                        child: Container(
+                          width: 50,
+                          height: 25,
+                          color: Colors.blue[
+                              700], // Slightly darker shade for the effect
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            }),
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueAccent,
-        onTap: _onItemTapped,
       ),
     );
   }
+
+  IconData _getIconForIndex(int index) {
+    switch (index) {
+      case 0:
+        return Icons.home;
+      case 1:
+        return Icons.water;
+      case 2:
+        return Icons.payment;
+      case 3:
+        return Icons.person;
+      default:
+        return Icons.home; // Default icon
+    }
+  }
+}
+
+// Custom clipper for the half-circle effect above the selected icon
+class HalfCircleClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height);
+    path.quadraticBezierTo(
+      size.width / 2, 0, // Control point for the curve
+      size.width, size.height,
+    );
+    path.lineTo(size.width, size.height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
