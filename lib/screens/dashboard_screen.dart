@@ -1,144 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Account Balance
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Account Balance',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // User Profile Overview
+              Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage('https://example.com/profile.jpg'),
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('John Doe', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          Text('Account No: 123456', style: TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'KES 5,000.00',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Water Usage
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 5,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Water Usage',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Daily Usage: 100 liters',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'Weekly Usage: 700 liters',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'Monthly Usage: 2800 liters',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Notifications
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.redAccent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Notifications',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    '1. Your bill is due on 30th October.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    '2. Scheduled maintenance on 25th October.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Action Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add action for Pay Bills
-                  },
-                  child: const Text('Pay Bills'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add action for Report Issue
-                  },
-                  child: const Text('Report Issue'),
+              ),
+              SizedBox(height: 20),
+
+              // Water Bill Summary
+              Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text('Current Bill: KSh 2,500', style: TextStyle(fontSize: 18)),
+                      Text('Due Date: 25th Oct 2024', style: TextStyle(color: Colors.grey)),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Navigate to payment screen
+                        },
+                        child: Text('Pay Now'),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: 20),
+
+              // Usage Monitoring (Placeholder for Chart)
+              Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text('Water Usage Over Time', style: TextStyle(fontSize: 18)),
+                      // Placeholder for chart widget
+                      SizedBox(
+                        height: 200,
+                        child: charts.BarChart(
+                          [
+                            charts.Series(
+                              id: 'Water Usage',
+                              domainFn: (dynamic usage, _) => usage['month'],
+                              measureFn: (dynamic usage, _) => usage['amount'],
+                              data: [
+                                {'month': 'Jan', 'amount': 300},
+                                {'month': 'Feb', 'amount': 400},
+                                {'month': 'Mar', 'amount': 350},
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+
+              // Quick Action Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigate to report fault screen
+                    },
+                    child: Text('Report Fault'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigate to support screen
+                    },
+                    child: Text('Contact Support'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
