@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +20,18 @@ class RegisterScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Username Field
-            TextField(
-              decoration: const InputDecoration(labelText: 'Username'),
+            const TextField(
+              decoration: InputDecoration(labelText: 'Username'),
             ),
             const SizedBox(height: 10),
             // Email Field
-            TextField(
-              decoration: const InputDecoration(labelText: 'Email'),
+            const TextField(
+              decoration: InputDecoration(labelText: 'Email'),
             ),
             const SizedBox(height: 10),
             // Password Field
-            TextField(
-              decoration: const InputDecoration(labelText: 'Password'),
+            const TextField(
+              decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             const SizedBox(height: 20),

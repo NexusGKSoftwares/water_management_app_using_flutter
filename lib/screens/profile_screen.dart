@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Sample user data
-    final String userName = "John Doe";
-    final String phoneNumber = "+123 456 7890";
-    final String email = "john.doe@example.com";
-    final String address = "123 Water St, City, Country with a longer address example";
+    const String userName = "John Doe";
+    const String phoneNumber = "+123 456 7890";
+    const String email = "john.doe@example.com";
+    const String address = "123 Water St, City, Country with a longer address example";
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         backgroundColor: Colors.redAccent,
       ),
       body: SingleChildScrollView( // Enable scrolling
@@ -23,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
                         'https://via.placeholder.com/150'), // Placeholder image
@@ -35,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () {
                         // Add functionality to change profile picture
                       },
-                      child: CircleAvatar(
+                      child: const CircleAvatar(
                         radius: 20,
                         backgroundColor: Colors.redAccent,
                         child: Icon(
@@ -49,14 +51,14 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // User Information Section
-            Text(
+            const Text(
               'User Information',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Card(
               elevation: 4,
               child: Padding(
@@ -71,14 +73,14 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Settings and Logout Section
-            Text(
+            const Text(
               'Settings',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Card(
               elevation: 4,
               child: Padding(
@@ -86,29 +88,29 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      title: Text('Change Password'),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      title: const Text('Change Password'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         // Add functionality for changing password
                       },
                     ),
                     ListTile(
-                      title: Text('Privacy Settings'),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      title: const Text('Privacy Settings'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         // Add functionality for privacy settings
                       },
                     ),
                     ListTile(
-                      title: Text('Help & Support'),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      title: const Text('Help & Support'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         // Add functionality for help and support
                       },
                     ),
                     ListTile(
-                      title: Text('Logout'),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      title: const Text('Logout'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         // Add functionality for logout
                       },
@@ -132,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
             ),
           ),

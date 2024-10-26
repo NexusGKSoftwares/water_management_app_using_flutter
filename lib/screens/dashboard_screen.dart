@@ -7,6 +7,8 @@ import 'profile_screen.dart';
 import 'settings_screen.dart'; // Import your settings screen
 
 class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,11 +19,11 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             children: [
               _buildBanner(),  // Add the banner here
-              SizedBox(height: 20),  // Space between banner and cards
+              const SizedBox(height: 20),  // Space between banner and cards
               GridView(
                 shrinkWrap: true,  // Allow grid to take only needed height
-                physics: NeverScrollableScrollPhysics(),  // Disable scrolling on the grid
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                physics: const NeverScrollableScrollPhysics(),  // Disable scrolling on the grid
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,  // Two cards per row
                   childAspectRatio: 4 / 3,  // Larger card size by adjusting aspect ratio
                   crossAxisSpacing: 10,
@@ -50,7 +52,7 @@ Widget _buildBanner() {
       color: Colors.blueAccent,
       borderRadius: BorderRadius.circular(15.0),
     ),
-    child: Stack(
+    child: const Stack(
       alignment: Alignment.topCenter,
       children: [
         // Banner content
@@ -90,6 +92,14 @@ Widget _buildBanner() {
     return Hero(
       tag: heroTag,
       child: GridTile(
+        footer: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            footerText,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          ),
+        ),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -117,14 +127,6 @@ Widget _buildBanner() {
                 ),
               ],
             ),
-          ),
-        ),
-        footer: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Text(
-            footerText,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
           ),
         ),
       ),

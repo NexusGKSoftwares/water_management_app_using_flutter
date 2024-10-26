@@ -7,12 +7,12 @@ class BillListItem extends StatelessWidget {
   final VoidCallback onPayPressed;
 
   const BillListItem({
-    Key? key,
+    super.key,
     required this.billName,
     required this.billAmount,
     required this.dueDate,
     required this.onPayPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

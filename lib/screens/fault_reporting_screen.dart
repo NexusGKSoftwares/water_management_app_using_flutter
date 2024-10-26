@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class FaultReportingScreen extends StatefulWidget {
+  const FaultReportingScreen({super.key});
+
   @override
   _FaultReportingScreenState createState() => _FaultReportingScreenState();
 }
@@ -27,7 +29,7 @@ class _FaultReportingScreenState extends State<FaultReportingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Report a Fault'),
+        title: const Text('Report a Fault'),
         backgroundColor: Colors.redAccent,
       ),
       body: Padding(
@@ -37,17 +39,17 @@ class _FaultReportingScreenState extends State<FaultReportingScreen> {
           child: ListView(
             children: [
               // Fault Category Dropdown
-              Text(
+              const Text(
                 'Select Fault Category',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                 ),
-                items: [
+                items: const [
                   DropdownMenuItem(value: 'Leakage', child: Text('Water Leakage')),
                   DropdownMenuItem(value: 'Interruption', child: Text('Supply Interruption')),
                   DropdownMenuItem(value: 'Quality', child: Text('Water Quality Issue')),
@@ -58,19 +60,19 @@ class _FaultReportingScreenState extends State<FaultReportingScreen> {
                   });
                 },
                 validator: (value) => value == null ? 'Please select a category' : null,
-                hint: Text('Select a category'),
+                hint: const Text('Select a category'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Description Field
-              Text(
+              const Text(
                 'Describe the Issue',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 maxLines: 4,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Provide details of the issue you are facing...',
                 ),
@@ -79,49 +81,49 @@ class _FaultReportingScreenState extends State<FaultReportingScreen> {
                 },
                 validator: (value) => value == null || value.isEmpty ? 'Please enter a description' : null,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Image Upload Section
-              Text(
+              const Text(
                 'Upload a Photo (optional)',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   ElevatedButton.icon(
                     onPressed: () => _pickImage(ImageSource.camera),
-                    icon: Icon(Icons.camera),
-                    label: Text('Camera'),
+                    icon: const Icon(Icons.camera),
+                    label: const Text('Camera'),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   ElevatedButton.icon(
                     onPressed: () => _pickImage(ImageSource.gallery),
-                    icon: Icon(Icons.photo_library),
-                    label: Text('Gallery'),
+                    icon: const Icon(Icons.photo_library),
+                    label: const Text('Gallery'),
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _image != null
                   ? Image.file(
                       _image!,
                       height: 200,
                     )
-                  : Text('No image selected'),
-              SizedBox(height: 20),
+                  : const Text('No image selected'),
+              const SizedBox(height: 20),
 
               // Submit Button
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Handle form submission logic here
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Fault report submitted successfully')));
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Fault report submitted successfully')));
                     // Optionally, you can navigate to another page or clear the form after submission
                   }
                 },
-                child: Text('Submit Report'),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                child: Text('Submit Report'),
               ),
             ],
           ),

@@ -7,6 +7,8 @@ void main() {
 }
 
 class WaterManagementApp extends StatelessWidget {
+  const WaterManagementApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

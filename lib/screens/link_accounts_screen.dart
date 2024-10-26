@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // Import FontAwesome
 
 class LinkAccountsScreen extends StatelessWidget {
+  const LinkAccountsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Link Accounts'),
+        title: const Text('Link Accounts'),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
@@ -14,11 +16,11 @@ class LinkAccountsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Link your social media accounts to enhance your experience.',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             _buildAccountTile(
               context,
@@ -27,10 +29,10 @@ class LinkAccountsScreen extends StatelessWidget {
               color: Colors.blue,
               isLinked: false,
               onTapLink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Facebook account linked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Facebook account linked')));
               },
               onTapUnlink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Facebook account unlinked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Facebook account unlinked')));
               },
             ),
             _buildAccountTile(
@@ -40,10 +42,10 @@ class LinkAccountsScreen extends StatelessWidget {
               color: Colors.red,
               isLinked: true,
               onTapLink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google account linked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Google account linked')));
               },
               onTapUnlink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Google account unlinked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Google account unlinked')));
               },
             ),
             _buildAccountTile(
@@ -53,10 +55,10 @@ class LinkAccountsScreen extends StatelessWidget {
               color: Colors.lightBlue,
               isLinked: false,
               onTapLink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Twitter account linked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Twitter account linked')));
               },
               onTapUnlink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Twitter account unlinked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Twitter account unlinked')));
               },
             ),
             _buildAccountTile(
@@ -66,10 +68,10 @@ class LinkAccountsScreen extends StatelessWidget {
               color: Colors.black,
               isLinked: false,
               onTapLink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Apple account linked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Apple account linked')));
               },
               onTapUnlink: () {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Apple account unlinked')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Apple account unlinked')));
               },
             ),
           ],
@@ -83,7 +85,7 @@ class LinkAccountsScreen extends StatelessWidget {
       leading: Icon(icon, color: color, size: 30),
       title: Text(
         platform,
-        style: TextStyle(fontSize: 18),
+        style: const TextStyle(fontSize: 18),
       ),
       subtitle: Text(isLinked ? 'Linked' : 'Not Linked', style: TextStyle(color: isLinked ? Colors.green : Colors.red)),
       trailing: ElevatedButton(

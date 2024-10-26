@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
 class PrivacyPage extends StatelessWidget {
+  const PrivacyPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Privacy Settings'),
+        title: const Text('Privacy Settings'),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Text(
+            const Text(
               'Manage your privacy settings',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             _buildPrivacySetting(
               context,
@@ -25,7 +27,7 @@ class PrivacyPage extends StatelessWidget {
               icon: Icons.share,
               onTap: () {
                 // Handle tap
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data Sharing settings opened')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Data Sharing settings opened')));
               },
             ),
             _buildPrivacySetting(
@@ -35,7 +37,7 @@ class PrivacyPage extends StatelessWidget {
               icon: Icons.security,
               onTap: () {
                 // Handle tap
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Account Security settings opened')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Account Security settings opened')));
               },
             ),
             _buildPrivacySetting(
@@ -45,7 +47,7 @@ class PrivacyPage extends StatelessWidget {
               icon: Icons.ad_units,
               onTap: () {
                 // Handle tap
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Ad Personalization settings opened')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ad Personalization settings opened')));
               },
             ),
             _buildPrivacySetting(
@@ -55,7 +57,7 @@ class PrivacyPage extends StatelessWidget {
               icon: Icons.notifications,
               onTap: () {
                 // Handle tap
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Push Notifications settings opened')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Push Notifications settings opened')));
               },
             ),
             _buildPrivacySetting(
@@ -65,7 +67,7 @@ class PrivacyPage extends StatelessWidget {
               icon: Icons.access_time,
               onTap: () {
                 // Handle tap
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data Retention settings opened')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Data Retention settings opened')));
               },
             ),
             _buildPrivacySetting(
@@ -75,11 +77,11 @@ class PrivacyPage extends StatelessWidget {
               icon: Icons.delete_forever,
               onTap: () {
                 // Handle tap
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data cleared successfully')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Data cleared successfully')));
               },
             ),
-            SizedBox(height: 30),
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               'Your privacy is important to us. Please review these settings regularly.',
               style: TextStyle(fontSize: 14, color: Colors.grey),
               textAlign: TextAlign.center,
@@ -96,9 +98,9 @@ class PrivacyPage extends StatelessWidget {
       elevation: 4,
       child: ListTile(
         leading: Icon(icon, color: Colors.blueAccent, size: 30),
-        title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         subtitle: Text(description),
-        trailing: Icon(Icons.arrow_forward),
+        trailing: const Icon(Icons.arrow_forward),
         onTap: onTap,
       ),
     );

@@ -4,9 +4,9 @@ class NotificationIcon extends StatelessWidget {
   final int notificationCount;
 
   const NotificationIcon({
-    Key? key,
+    super.key,
     required this.notificationCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

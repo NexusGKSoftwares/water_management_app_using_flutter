@@ -7,11 +7,13 @@ import 'theme_screen.dart';
 import 'language_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
         backgroundColor: Colors.blueAccent,
       ),
       body: ListView(
@@ -51,7 +53,7 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSettingsSectionTitle('Notifications'),
           _buildSettingsTile(
@@ -60,10 +62,10 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.notifications_active,
             onTap: () {
               // Add a real page here if necessary
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Notifications turned")));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Notifications turned")));
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSettingsSectionTitle('Privacy'),
           _buildSettingsTile(
@@ -77,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSettingsSectionTitle('Theme'),
           _buildSettingsTile(
@@ -91,7 +93,7 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _buildSettingsSectionTitle('Language'),
           _buildSettingsTile(
@@ -115,7 +117,7 @@ class SettingsScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
       child: Text(
         title,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -126,7 +128,7 @@ class SettingsScreen extends StatelessWidget {
       leading: Icon(icon, color: Colors.blueAccent),
       title: Text(
         title,
-        style: TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 16),
       ),
       onTap: onTap,
     );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeScreen extends StatefulWidget {
+  const ThemeScreen({super.key});
+
   @override
   _ThemeScreenState createState() => _ThemeScreenState();
 }
@@ -38,25 +40,25 @@ class _ThemeScreenState extends State<ThemeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Theme Settings'),
+        title: const Text('Theme Settings'),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Select your preferred theme:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SwitchListTile(
-              title: Text('Dark Mode'),
+              title: const Text('Dark Mode'),
               value: _isDarkMode,
               onChanged: _toggleTheme,
               secondary: Icon(_isDarkMode ? Icons.dark_mode : Icons.light_mode),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Apply the selected theme immediately
@@ -70,10 +72,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 // Optionally pop the screen after saving
                 Navigator.pop(context);
               },
-              child: Text('Apply Theme'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent, // Customize button color
               ),
+              child: Text('Apply Theme'),
             ),
           ],
         ),

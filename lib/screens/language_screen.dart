@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageScreen extends StatefulWidget {
+  const LanguageScreen({super.key});
+
   @override
   _LanguageScreenState createState() => _LanguageScreenState();
 }
@@ -36,18 +38,18 @@ class _LanguageScreenState extends State<LanguageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Language Settings'),
+        title: const Text('Language Settings'),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Select your preferred language:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: _languages.length,
@@ -71,7 +73,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
     return ListTile(
       title: Text(languageName),
       trailing: _selectedLanguage == languageCode
-          ? Icon(Icons.check, color: Colors.green)
+          ? const Icon(Icons.check, color: Colors.green)
           : null,
       onTap: () async {
         setState(() {

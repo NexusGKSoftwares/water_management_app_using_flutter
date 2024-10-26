@@ -9,11 +9,12 @@ class NotificationsScreen extends StatelessWidget {
     'Reminder: Update your profile information for better service.',
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications'),
+        title: const Text('Notifications'),
         backgroundColor: Colors.redAccent,
       ),
       body: Padding(
@@ -28,7 +29,7 @@ class NotificationsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   notifications[index],
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             );
