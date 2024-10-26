@@ -14,17 +14,19 @@ class DashboardScreen extends StatelessWidget {
         title: Text('Dashboard'),
         backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildBanner(),
-            SizedBox(height: 16.0), // Space between banner and grid
-            Expanded(
-              child: GridView(
+      body: SingleChildScrollView(  // Enable scrolling
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildBanner(),  // Add the banner here
+              SizedBox(height: 20),  // Space between banner and cards
+              GridView(
+                shrinkWrap: true,  // Allow grid to take only needed height
+                physics: NeverScrollableScrollPhysics(),  // Disable scrolling on the grid
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two cards per row
-                  childAspectRatio: 4 / 3, // Larger card size by adjusting aspect ratio
+                  crossAxisCount: 2,  // Two cards per row
+                  childAspectRatio: 4 / 3,  // Larger card size by adjusting aspect ratio
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
@@ -37,37 +39,51 @@ class DashboardScreen extends StatelessWidget {
                   _buildDashboardCard(context, 'Settings', Icons.settings, Colors.teal, SettingsScreen(), '', 'settingsHero'), // Settings Card
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
+  // Function to create the banner with a logo
   Widget _buildBanner() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: 150,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blueAccent, Colors.lightBlueAccent],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return Container(
+      height: 200,  // Height of the banner
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          // Banner content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Welcome to Water Management',
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Manage your water supply efficiently',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
             ),
-            borderRadius: BorderRadius.circular(15.0),
           ),
-        ),
-        Positioned(
-          top: 60, // Adjust this value to move the icon up or down
-          child: CircleAvatar(
-            radius: 40, // Adjust size as needed
-            backgroundColor: Colors.white,
-            child: Icon(Icons.info, size: 50, color: Colors.blueAccent), // Your desired icon
+          // Logo at the top of the banner
+          Positioned(
+            top: -40,  // Adjust this value to position the logo
+            child: CircleAvatar(
+              radius: 40,  // Size of the logo
+              backgroundImage: AssetImage('assets/logo.png'),  // Your logo path
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
