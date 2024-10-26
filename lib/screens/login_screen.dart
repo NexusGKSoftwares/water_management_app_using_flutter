@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       // App logo or title
                       const Text(
-                        'Water Management App',
+                        'Pure Drops Waters',
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
