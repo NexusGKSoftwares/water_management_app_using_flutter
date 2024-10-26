@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -40,7 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.jpg'), // Add your background image
+                image: AssetImage(
+                    'assets/background.jpg'), // Add your background image
                 fit: BoxFit.cover,
               ),
             ),
@@ -78,7 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          prefixIcon: const Icon(Icons.email, color: Colors.white),
+                          prefixIcon:
+                              const Icon(Icons.email, color: Colors.white),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -102,7 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                          prefixIcon:
+                              const Icon(Icons.lock, color: Colors.white),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -116,13 +120,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ElevatedButton(
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white, shape: RoundedRectangleBorder(
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
-                          ), backgroundColor: Colors.blueAccent,
+                          ),
+                          backgroundColor: Colors.blueAccent,
                           elevation: 5,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 50),
                           child: Text(
                             'Login',
                             style: TextStyle(fontSize: 18),
