@@ -45,47 +45,48 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Function to create the banner with a logo
-  Widget _buildBanner() {
-    return Container(
-      height: 200,  // Height of the banner
-      decoration: BoxDecoration(
-        color: Colors.blueAccent,
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          // Banner content
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Welcome to Water Management',
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Manage your water supply efficiently',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ],
-            ),
+// Function to create the banner with a logo
+Widget _buildBanner() {
+  return Container(
+    height: 200,  // Height of the banner
+    decoration: BoxDecoration(
+      color: Colors.blueAccent,
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    child: Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        // Banner content
+        Center(  // Center the column within the banner
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Welcome to Water Management',
+                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,  // Center the text
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Manage your water supply efficiently',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+                textAlign: TextAlign.center,  // Center the text
+              ),
+            ],
           ),
-          // Logo at the top of the banner
-          Positioned(
-            top: -40,  // Adjust this value to position the logo
-            child: CircleAvatar(
-              radius: 40,  // Size of the logo
-              backgroundImage: AssetImage('assets/logo.png'),  // Your logo path
-            ),
+        ),
+        // Logo at the top of the banner
+        Positioned(
+          top: -40,  // Adjust this value to position the logo
+          child: CircleAvatar(
+            radius: 40,  // Size of the logo
+            backgroundImage: AssetImage('assets/logo.png'),  // Your logo path
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   // Generalized card builder for all sections, similar to the profile card
   Widget _buildDashboardCard(BuildContext context, String title, IconData icon, Color color, Widget targetScreen, String footerText, String heroTag) {
