@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'register_screen.dart';
+import 'forgot_password_screen.dart'; // Import the Forgot Password screen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   // Simulate a login action (you can replace this with actual authentication logic)
   void _login() {
     if (_formKey.currentState!.validate()) {
-      // Replace this with actual login logic (e.g., API call)
       String email = _emailController.text;
       String password = _passwordController.text;
 
@@ -41,8 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/background.jpg'), // Add your background image
+                image: AssetImage('assets/background.jpg'), // Background image
                 fit: BoxFit.cover,
               ),
             ),
@@ -143,7 +142,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              // Forgot password logic
+                              // Navigate to Forgot Password page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ForgotPasswordScreen()),
+                              );
                             },
                             child: const Text(
                               'Forgot Password?',
@@ -152,7 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              // Navigate to signup page
+                              // Navigate to Signup page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen()),
+                              );
                             },
                             child: const Text(
                               'Sign Up',
