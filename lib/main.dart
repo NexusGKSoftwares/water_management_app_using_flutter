@@ -12,7 +12,7 @@ class WaterManagementApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Water Management App',
+      title: 'Pure Drops',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
