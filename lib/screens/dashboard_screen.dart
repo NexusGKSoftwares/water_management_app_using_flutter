@@ -77,7 +77,7 @@ Widget _buildBanner() {
           top: -40,  // Adjust this value to position the logo
           child: CircleAvatar(
             radius: 40,  // Size of the logo
-            backgroundImage: AssetImage('assets/logo.png'),  // Your logo path
+            backgroundImage: AssetImage('assets/image.png'),  // Your logo path
           ),
         ),
       ],
