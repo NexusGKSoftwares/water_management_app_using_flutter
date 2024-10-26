@@ -42,6 +42,7 @@ dependencies:
   fluttertoast: ^8.0.8
   charts_flutter: ^0.12.0
   image_picker: ^1.1.2
+  font_awesome_flutter: ^10.7.0
   
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+  - assets/background.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

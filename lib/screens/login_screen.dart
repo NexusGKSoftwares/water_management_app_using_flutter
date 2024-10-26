@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -6,86 +7,158 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true; // To toggle password visibility
+
+  // Simulate a login action (you can replace this with actual authentication logic)
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      // Replace this with actual login logic (e.g., API call)
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      // For demonstration, just print the login details
+      print("Email: $email, Password: $password");
+
+      // Navigate to the dashboard after login
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Username Input
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Username',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person),
+      body: Stack(
+        children: [
+          // Background image
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background.jpg'), // Add your background image
+                fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 16.0),
-            // Password Input
-            TextField(
-              controller: _passwordController,
-              obscureText: _obscureText,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility : Icons.visibility_off,
+          ),
+          // Login Form
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // App logo or title
+                      Text(
+                        'Water Management App',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 40),
+                      // Email input field
+                      TextFormField(
+                        controller: _emailController,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          labelStyle: TextStyle(color: Colors.white),
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: Icon(Icons.email, color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Password input field
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        style: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.white),
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: Icon(Icons.lock, color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 24),
+                      // Login button
+                      ElevatedButton(
+                        onPressed: _login,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white, shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ), backgroundColor: Colors.blueAccent,
+                          elevation: 5,
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      // Forgot Password and Signup links
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              // Forgot password logic
+                            },
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Navigate to signup page
+                            },
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
-            // Login Button
-            ElevatedButton(
-              onPressed: () {
-                // Add login logic here
-                String username = _usernameController.text;
-                String password = _passwordController.text;
-                // Handle login action
-              },
-              child: Text('Login'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent, // Background color
-                padding: EdgeInsets.symmetric(vertical: 12.0),
-                textStyle: TextStyle(fontSize: 18),
-              ),
-            ),
-            SizedBox(height: 20.0),
-            // Forgot Password
-            TextButton(
-              onPressed: () {
-                // Navigate to Forgot Password Page
-              },
-              child: Text('Forgot Password?'),
-            ),
-            SizedBox(height: 20.0),
-            // Sign Up Link
-            TextButton(
-              onPressed: () {
-                // Navigate to Sign Up Page
-              },
-              child: Text('Don’t have an account? Sign Up'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
