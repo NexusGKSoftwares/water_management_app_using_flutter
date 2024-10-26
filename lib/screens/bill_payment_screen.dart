@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'mpesa_payment_screen.dart';
+import 'card_payment_screen.dart';
+import 'bank_payment_screen.dart';
 
 class BillPaymentScreen extends StatelessWidget {
   const BillPaymentScreen({super.key});
@@ -68,33 +71,27 @@ class BillPaymentScreen extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            _buildPaymentOption(context, 'Pay via M-Pesa', Icons.phone_android, Colors.green),
-            _buildPaymentOption(context, 'Pay via Credit/Debit Card', Icons.credit_card, Colors.blue),
-            _buildPaymentOption(context, 'Pay via Bank Transfer', Icons.account_balance, Colors.orange),
+            _buildPaymentOption(context, 'Pay via M-Pesa', Icons.phone_android, Colors.green, MpesaPaymentScreen()),
+            _buildPaymentOption(context, 'Pay via Credit/Debit Card', Icons.credit_card, Colors.blue, CardPaymentScreen()),
+            _buildPaymentOption(context, 'Pay via Bank Transfer', Icons.account_balance, Colors.orange, BankPaymentScreen()),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPaymentOption(BuildContext context, String title, IconData icon, Color color) {
+  // Payment Option
+  Widget _buildPaymentOption(BuildContext context, String title, IconData icon, Color color, Widget paymentPage) {
     return ListTile(
       leading: Icon(icon, size: 30, color: color),
       title: Text(title, style: const TextStyle(fontSize: 18)),
       trailing: const Icon(Icons.arrow_forward_ios, size: 18),
       onTap: () {
-        // Implement navigation to payment method details
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Payment Option Selected'),
-            content: Text('You selected $title'),
-            actions: [
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
+        // Navigate to the respective payment page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => paymentPage,
           ),
         );
       },
