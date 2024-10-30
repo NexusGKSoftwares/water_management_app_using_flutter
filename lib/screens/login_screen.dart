@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Navigate to the dashboard after login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     }
   }
@@ -126,8 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           backgroundColor: Colors.blueAccent,
                           elevation: 5,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
                               vertical: 15, horizontal: 50),
                           child: Text(
                             'Login',

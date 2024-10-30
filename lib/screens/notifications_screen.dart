@@ -9,6 +9,8 @@ class NotificationsScreen extends StatelessWidget {
     'Reminder: Update your profile information for better service.',
   ];
 
+  const NotificationsScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {

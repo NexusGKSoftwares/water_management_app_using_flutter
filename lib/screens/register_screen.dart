@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';  // You can replace this with the actual destination after registration
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -23,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       print("Name: $name, Email: $email, Password: $password");
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Account created successfully'),
         ),
       );
@@ -31,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Navigate to the dashboard after registration
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     }
   }
@@ -40,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
         backgroundColor: Colors.blueAccent,
       ),
       body: Stack(
@@ -187,8 +189,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               backgroundColor: Colors.blueAccent,
                               elevation: 5,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 50),
                               child: Text(
                                 'Register',

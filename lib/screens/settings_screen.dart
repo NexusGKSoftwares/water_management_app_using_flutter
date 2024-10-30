@@ -27,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
           ),
@@ -38,7 +38,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ChangePasswordScreen()),
+                MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
               );
             },
           ),
@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LinkAccountsScreen()),
+                MaterialPageRoute(builder: (context) => const LinkAccountsScreen()),
               );
             },
           ),
@@ -75,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PrivacyPage()),
+                MaterialPageRoute(builder: (context) => const PrivacyPage()),
               );
             },
           ),
@@ -89,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ThemeScreen()),
+                MaterialPageRoute(builder: (context) => const ThemeScreen()),
               );
             },
           ),
@@ -103,7 +103,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LanguageScreen()),
+                MaterialPageRoute(builder: (context) => const LanguageScreen()),
               );
             },
           ),

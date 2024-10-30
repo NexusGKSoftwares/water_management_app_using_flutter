@@ -30,12 +30,12 @@ class DashboardScreen extends StatelessWidget {
                   mainAxisSpacing: 10,
                 ),
                 children: <Widget>[
-                  _buildDashboardCard(context, 'Bill Payment', Icons.payment, Colors.orangeAccent, BillPaymentScreen(), '', 'paymentHero'),
+                  _buildDashboardCard(context, 'Bill Payment', Icons.payment, Colors.orangeAccent, const BillPaymentScreen(), '', 'paymentHero'),
                   _buildDashboardCard(context, 'Water Usage', Icons.bar_chart, Colors.blue, WaterUsageScreen(), '', 'usageHero'),
-                  _buildDashboardCard(context, 'Fault', Icons.report_problem, Colors.redAccent, FaultReportingScreen(), '', 'faultHero'),
+                  _buildDashboardCard(context, 'Fault', Icons.report_problem, Colors.redAccent, const FaultReportingScreen(), '', 'faultHero'),
                   _buildDashboardCard(context, 'Notifications', Icons.notifications, Colors.green, NotificationsScreen(), '', 'notificationHero'),
-                  _buildDashboardCard(context, 'Profile', Icons.person, Colors.purple, ProfileScreen(), '', 'profileHero'),
-                  _buildDashboardCard(context, 'Settings', Icons.settings, Colors.teal, SettingsScreen(), '', 'settingsHero'), // Settings Card
+                  _buildDashboardCard(context, 'Profile', Icons.person, Colors.purple, const ProfileScreen(), '', 'profileHero'),
+                  _buildDashboardCard(context, 'Settings', Icons.settings, Colors.teal, const SettingsScreen(), '', 'settingsHero'), // Settings Card
                 ],
               ),
             ],
@@ -61,7 +61,7 @@ Widget _buildBanner() {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Welcome to Water Management',
+                'Welcome to Pure Drops Waters',
                 style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,  // Center the text
               ),
@@ -120,10 +120,10 @@ Widget _buildBanner() {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, size: 50, color: Colors.white),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   title,
-                  style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

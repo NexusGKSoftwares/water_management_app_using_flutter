@@ -3,7 +3,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() {
-  runApp(WaterManagementApp());
+  runApp(const WaterManagementApp());
 }
 
 class WaterManagementApp extends StatelessWidget {
@@ -16,7 +16,7 @@ class WaterManagementApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }

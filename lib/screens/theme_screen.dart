@@ -75,7 +75,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent, // Customize button color
               ),
-              child: Text('Apply Theme'),
+              child: const Text('Apply Theme'),
             ),
           ],
         ),

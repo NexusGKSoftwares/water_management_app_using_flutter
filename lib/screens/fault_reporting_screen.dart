@@ -123,7 +123,7 @@ class _FaultReportingScreenState extends State<FaultReportingScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                child: Text('Submit Report'),
+                child: const Text('Submit Report'),
               ),
             ],
           ),
