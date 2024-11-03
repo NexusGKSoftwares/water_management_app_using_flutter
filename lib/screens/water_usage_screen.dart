@@ -4,8 +4,7 @@ class WaterUsageScreen extends StatelessWidget {
   // Sample data for daily water usage in liters
   final List<int> usageData = [70, 65, 50, 90, 40, 80, 75];
 
-  const WaterUsageScreen({super.key});
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
