@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/nexusgk/water_management_app_using_flutter/linux"
+    "cmake.sourceDirectory": "/home/nexusgk/water_management_app_using_flutter/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
