@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   // Replace this with your backend URL
-  final String _loginUrl = 'http://localhost/pure/login.php';
+  final String _loginUrl = 'http://localhost/pure/login.php'; // Update with your server address
 
   // Method to perform login
   Future<void> _login() async {
@@ -41,21 +41,39 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         // Assuming the backend returns a JSON with a success message
         var responseData = jsonDecode(response.body);
-        print('Login successful: ${responseData['message']}');
 
-        // Navigate to the dashboard after login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
-        );
+        // Check if the login was successful based on the backend response
+        if (responseData['message'] == 'Login successful') {
+          print('Login successful: ${responseData['message']}');
+
+          // Navigate to the dashboard after login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          );
+        } else {
+          // Handle login failure (custom error message)
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Login Failed'),
+              content: Text(responseData['message'] ?? 'Invalid credentials'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
       } else {
-        // Handle login failure (you can customize the error message based on the response)
-        var responseData = jsonDecode(response.body);
+        // Handle server error
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Login Failed'),
-            content: Text(responseData['message'] ?? 'Invalid credentials'),
+            title: const Text('Server Error'),
+            content: const Text('There was an error communicating with the server. Please try again later.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
