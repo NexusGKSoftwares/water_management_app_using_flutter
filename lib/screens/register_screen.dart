@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';  // You can replace this with the actual destination after registration
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,26 +17,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
-  // Simulate registration action (you can replace this with actual registration logic)
-  void _register() {
+  // Function to register a new user
+  Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       String name = _nameController.text;
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      print("Name: $name, Email: $email, Password: $password");
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Account created successfully'),
-        ),
+      // Send registration data to the PHP backend
+      final response = await http.post(
+        Uri.parse('http://localhost/pure/register.php'), // Replace with your server URL
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'email': email,
+          'password': password,
+        }),
       );
 
-      // Navigate to the dashboard after registration
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
-      );
+      final responseData = jsonDecode(response.body);
+
+      if (responseData['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Account created successfully'),
+          ),
+        );
+        // Navigate to the dashboard after registration
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${responseData['message']}'),
+          ),
+        );
+      }
     }
   }
 
