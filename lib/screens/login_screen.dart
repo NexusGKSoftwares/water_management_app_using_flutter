@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   // Replace this with your backend URL
-  final String _loginUrl = 'https://your-backend-url.com/api/login';
+  final String _loginUrl = 'http://localhost/pure/login.php';
 
   // Method to perform login
   Future<void> _login() async {
