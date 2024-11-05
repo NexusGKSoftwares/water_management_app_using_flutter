@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard_screen.dart';  // You can replace this with the actual destination after registration
+import 'login_screen.dart';  // You can replace this with the actual destination after registration
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // Navigate to the dashboard after registration
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
