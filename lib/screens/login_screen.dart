@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // For JSON encoding/decoding
 import 'dashboard_screen.dart';
 import 'register_screen.dart';
 import 'forgot_password_screen.dart'; // Import the Forgot Password screen
@@ -15,20 +17,54 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Simulate a login action (you can replace this with actual authentication logic)
-  void _login() {
+  // Replace this with your backend URL
+  final String _loginUrl = 'https://your-backend-url.com/api/login';
+
+  // Method to perform login
+  Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      // For demonstration, just print the login details
-      print("Email: $email, Password: $password");
-
-      // Navigate to the dashboard after login
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+      // Prepare the request
+      final response = await http.post(
+        Uri.parse(_loginUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
       );
+
+      if (response.statusCode == 200) {
+        // Assuming the backend returns a JSON with a success message
+        var responseData = jsonDecode(response.body);
+        print('Login successful: ${responseData['message']}');
+
+        // Navigate to the dashboard after login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        );
+      } else {
+        // Handle login failure (you can customize the error message based on the response)
+        var responseData = jsonDecode(response.body);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Login Failed'),
+            content: Text(responseData['message'] ?? 'Invalid credentials'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
@@ -79,8 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          prefixIcon:
-                              const Icon(Icons.email, color: Colors.white),
+                          prefixIcon: const Icon(Icons.email, color: Colors.white),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -104,8 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
                           ),
-                          prefixIcon:
-                              const Icon(Icons.lock, color: Colors.white),
+                          prefixIcon: const Icon(Icons.lock, color: Colors.white),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -127,8 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           elevation: 5,
                         ),
                         child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 50),
+                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
                           child: Text(
                             'Login',
                             style: TextStyle(fontSize: 18),
@@ -145,9 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // Navigate to Forgot Password page
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ForgotPasswordScreen()),
+                                MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
                               );
                             },
                             child: const Text(
@@ -160,8 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // Navigate to Signup page
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => const RegisterScreen()),
+                                MaterialPageRoute(builder: (context) => const RegisterScreen()),
                               );
                             },
                             child: const Text(
