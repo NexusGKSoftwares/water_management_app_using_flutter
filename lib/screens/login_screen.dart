@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; // For JSON encoding/decoding
 import 'dashboard_screen.dart';
 import 'register_screen.dart';
-import 'forgot_password_screen.dart';
-import 'profile_screen.dart'; // Import your ProfileScreen
+import 'forgot_password_screen.dart'; // Import the Forgot Password screen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -40,40 +39,23 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.statusCode == 200) {
+        // Assuming the backend returns a JSON with a success message
         var responseData = jsonDecode(response.body);
 
         // Check if the login was successful based on the backend response
         if (responseData['message'] == 'Login successful') {
           print('Login successful: ${responseData['message']}');
 
-          // Extract the userId from the response
-          final String? userId = responseData['userId'];
+          // Assuming 'userId' is returned as an integer
+          int userId = responseData['userId']; // Ensure this is an integer
 
-          // Check if userId is not null
-          if (userId != null) {
-            // Navigate to the ProfileScreen with the userId
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ProfileScreen(userId: userId)),
-            );
-          } else {
-            // Handle the case where userId is null
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: const Text('User ID not found. Please try again later.'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );
-          }
+          // Navigate to the dashboard after login
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => DashboardScreen(userId: userId)),
+          );
         } else {
-          // Handle login failure
+          // Handle login failure (custom error message)
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -116,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.jpg'),
+                image: AssetImage('assets/background.jpg'), // Background image
                 fit: BoxFit.cover,
               ),
             ),
@@ -131,6 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // App logo or title
                       const Text(
                         'Pure Drops Waters',
                         style: TextStyle(
@@ -140,6 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 40),
+                      // Email input field
                       TextFormField(
                         controller: _emailController,
                         style: const TextStyle(color: Colors.white),
@@ -162,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
+                      // Password input field
                       TextFormField(
                         controller: _passwordController,
                         obscureText: true,
@@ -185,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       const SizedBox(height: 24),
+                      // Login button
                       ElevatedButton(
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
@@ -204,11 +190,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
+                      // Forgot Password and Signup links
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
                             onPressed: () {
+                              // Navigate to Forgot Password page
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
@@ -221,6 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
+                              // Navigate to Signup page
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const RegisterScreen()),
