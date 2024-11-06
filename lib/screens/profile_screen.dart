@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; // For JSON decoding
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String userId; // User ID passed from the login screen
+
+  const ProfileScreen({super.key, required this.userId});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -21,10 +23,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     userData = _fetchUserProfile();
   }
 
-  // Method to fetch user profile from the backend
+  // Method to fetch user profile from the backend using the user ID
   Future<Map<String, dynamic>> _fetchUserProfile() async {
     try {
-      final response = await http.get(Uri.parse(_profileUrl));
+      final response = await http.get(Uri.parse('$_profileUrl?userId=${widget.userId}'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -66,7 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 60,
-                          backgroundImage: NetworkImage(user['profilePictureUrl'] ?? 'https://via.placeholder.com/150'),
+                          backgroundImage: NetworkImage(
+                            user['profilePictureUrl'] ?? 'https://via.placeholder.com/150',
+                          ),
                         ),
                         Positioned(
                           bottom: 0,
@@ -90,6 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
                   // User Information Section
                   const Text(
                     'User Information',
@@ -102,15 +107,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          _buildInfoRow('Name', user['name']),
-                          _buildInfoRow('Phone Number', user['phoneNumber']),
-                          _buildInfoRow('Email', user['email']),
-                          _buildInfoRow('Address', user['address']),
+                          _buildInfoRow('Name', user['name'] ?? 'N/A'),
+                          _buildInfoRow('Phone Number', user['phoneNumber'] ?? 'N/A'),
+                          _buildInfoRow('Email', user['email'] ?? 'N/A'),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             );
