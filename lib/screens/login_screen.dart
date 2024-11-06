@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // For JSON decoding
+import 'dart:convert'; // For JSON encoding/decoding
+import 'dashboard_screen.dart';
+import 'register_screen.dart';
+import 'forgot_password_screen.dart';
 import 'profile_screen.dart'; // Import your ProfileScreen
 
 class LoginScreen extends StatefulWidget {
@@ -11,102 +14,214 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Replace this with your backend login URL
-  final String _loginUrl = 'http://localhost/pure/login.php';
+  // Replace this with your backend URL
+  final String _loginUrl = 'http://localhost/pure/login.php'; // Update with your server address
 
-  bool _isLoading = false;
-  String? _errorMessage;
-
+  // Method to perform login
   Future<void> _login() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text;
+      String password = _passwordController.text;
 
-    try {
+      // Prepare the request
       final response = await http.post(
         Uri.parse(_loginUrl),
-        body: {
-          'email': _emailController.text,
-          'password': _passwordController.text,
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
       );
 
       if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
+        var responseData = jsonDecode(response.body);
 
-        if (responseData['success']) {
-          final String userId = responseData['userId']; // Extract the user ID
+        // Check if the login was successful based on the backend response
+        if (responseData['message'] == 'Login successful') {
+          print('Login successful: ${responseData['message']}');
 
-          // Navigate to ProfileScreen with the userId
-          Navigator.push(
+          // Extract the userId from the response
+          final String userId = responseData['userId'];
+
+          // Navigate to the ProfileScreen with the userId
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => ProfileScreen(userId: userId),
-            ),
+            MaterialPageRoute(builder: (context) => ProfileScreen(userId: userId)),
           );
         } else {
-          setState(() {
-            _errorMessage = responseData['message'] ?? 'Login failed';
-          });
+          // Handle login failure
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Login Failed'),
+              content: Text(responseData['message'] ?? 'Invalid credentials'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
         }
       } else {
-        setState(() {
-          _errorMessage = 'Server error: ${response.statusCode}';
-        });
+        // Handle server error
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Server Error'),
+            content: const Text('There was an error communicating with the server. Please try again later.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       }
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Error: $e';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.redAccent,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+      body: Stack(
+        children: [
+          // Background image
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _login,
-                    child: const Text('Login'),
+          ),
+          // Login Form
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Pure Drops Waters',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 226, 1, 247),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      TextFormField(
+                        controller: _emailController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          labelStyle: const TextStyle(color: Colors.white),
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: const Icon(Icons.email, color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: const TextStyle(color: Colors.white),
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: _login,
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          backgroundColor: Colors.blueAccent,
+                          elevation: 5,
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+                          child: Text(
+                            'Login',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()),
+                              );
+                            },
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                              );
+                            },
+                            child: const Text(
+                              'Sign Up',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-            if (_errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Text(
-                  _errorMessage!,
-                  style: const TextStyle(color: Colors.red),
                 ),
               ),
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
