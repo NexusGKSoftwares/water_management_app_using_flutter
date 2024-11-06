@@ -7,25 +7,42 @@ import 'profile_screen.dart';
 import 'settings_screen.dart'; // Import your settings screen
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final String userName;
+  final String userEmail;
+
+  const DashboardScreen({super.key, required this.userName, required this.userEmail});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
-      body: SingleChildScrollView(  // Enable scrolling
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              // Add logout functionality here
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              _buildBanner(),  // Add the banner here
-              const SizedBox(height: 20),  // Space between banner and cards
+              _buildBanner(),
+              const SizedBox(height: 20),
+              // Display user information at the top
+              _buildUserInfo(),
+              const SizedBox(height: 20),
               GridView(
-                shrinkWrap: true,  // Allow grid to take only needed height
-                physics: const NeverScrollableScrollPhysics(),  // Disable scrolling on the grid
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,  // Two cards per row
-                  childAspectRatio: 4 / 3,  // Larger card size by adjusting aspect ratio
+                  crossAxisCount: 2,
+                  childAspectRatio: 4 / 3,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
@@ -35,7 +52,7 @@ class DashboardScreen extends StatelessWidget {
                   _buildDashboardCard(context, 'Fault', Icons.report_problem, Colors.redAccent, const FaultReportingScreen(), '', 'faultHero'),
                   _buildDashboardCard(context, 'Notifications', Icons.notifications, Colors.green, NotificationsScreen(), '', 'notificationHero'),
                   _buildDashboardCard(context, 'Profile', Icons.person, Colors.purple, const ProfileScreen(), '', 'profileHero'),
-                  _buildDashboardCard(context, 'Settings', Icons.settings, Colors.teal, const SettingsScreen(), '', 'settingsHero'), // Settings Card
+                  _buildDashboardCard(context, 'Settings', Icons.settings, Colors.teal, const SettingsScreen(), '', 'settingsHero'),
                 ],
               ),
             ],
@@ -44,50 +61,70 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
-// Function to create the banner with a logo
-Widget _buildBanner() {
-  return Container(
-    height: 200,  // Height of the banner
-    decoration: BoxDecoration(
-      color: Colors.blueAccent,
-      borderRadius: BorderRadius.circular(15.0),
-    ),
-    child: const Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        // Banner content
-        Center(  // Center the column within the banner
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Welcome to Pure Drops Waters',
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,  // Center the text
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Manage your water supply efficiently',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-                textAlign: TextAlign.center,  // Center the text
-              ),
-            ],
-          ),
-        ),
-        // Logo at the top of the banner
-        Positioned(
-          top: -40,  // Adjust this value to position the logo
-          child: CircleAvatar(
-            radius: 40,  // Size of the logo
-              // Your logo path
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
-  // Generalized card builder for all sections, similar to the profile card
+  Widget _buildUserInfo() {
+    return Card(
+      color: Colors.blueAccent,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hello, $userName',
+              style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Email: $userEmail',
+              style: const TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBanner() {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: const Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Welcome to Pure Drops Waters',
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Manage your water supply efficiently',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -40,
+            child: CircleAvatar(
+              radius: 40,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDashboardCard(BuildContext context, String title, IconData icon, Color color, Widget targetScreen, String footerText, String heroTag) {
     return Hero(
       tag: heroTag,
