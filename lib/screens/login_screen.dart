@@ -47,13 +47,31 @@ class _LoginScreenState extends State<LoginScreen> {
           print('Login successful: ${responseData['message']}');
 
           // Extract the userId from the response
-          final String userId = responseData['userId'];
+          final String? userId = responseData['userId'];
 
-          // Navigate to the ProfileScreen with the userId
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => ProfileScreen(userId: userId)),
-          );
+          // Check if userId is not null
+          if (userId != null) {
+            // Navigate to the ProfileScreen with the userId
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen(userId: userId)),
+            );
+          } else {
+            // Handle the case where userId is null
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Error'),
+                content: const Text('User ID not found. Please try again later.'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
         } else {
           // Handle login failure
           showDialog(
