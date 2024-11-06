@@ -29,7 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final response = await http.get(Uri.parse('$_profileUrl?userId=${widget.userId}'));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        var data = jsonDecode(response.body);
+        if (data.isEmpty) {
+          throw Exception('No data found for this user');
+        }
+        return data;
       } else {
         throw Exception('Failed to load profile data');
       }
@@ -52,7 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            String errorMessage = snapshot.error.toString();
+            return Center(child: Text('Error: $errorMessage'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No user data found'));
           } else {
@@ -123,6 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Helper function to build rows for user information
   Widget _buildInfoRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
