@@ -1,10 +1,100 @@
 import 'package:flutter/material.dart';
-import 'mpesa_payment_screen.dart';
-import 'card_payment_screen.dart';
-import 'bank_payment_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class BillPaymentScreen extends StatelessWidget {
+class BillPaymentScreen extends StatefulWidget {
   const BillPaymentScreen({super.key});
+
+  @override
+  _BillPaymentScreenState createState() => _BillPaymentScreenState();
+}
+
+class _BillPaymentScreenState extends State<BillPaymentScreen> {
+  final _userIdController = TextEditingController();
+  final _previousReadingController = TextEditingController();
+  final _currentReadingController = TextEditingController();
+  final _readingDateController = TextEditingController();
+
+  bool _isLoading = false;
+  String _message = '';
+  double _billAmount = 0.0;
+  int _unitsConsumed = 0;
+  int _previousReading = 0;
+  int _currentReading = 0;
+
+  // Submit reading and fetch bill details from the backend
+  Future<void> _submitReading() async {
+    setState(() {
+      _isLoading = true;
+      _message = '';
+    });
+
+    final String userId = _userIdController.text;
+    final String previousReading = _previousReadingController.text;
+    final String currentReading = _currentReadingController.text;
+    final String readingDate = _readingDateController.text;
+
+    // Validate inputs
+    if (userId.isEmpty || previousReading.isEmpty || currentReading.isEmpty || readingDate.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _message = 'Please fill in all fields.';
+      });
+      return;
+    }
+
+    // Create the request payload
+    final Map<String, String> body = {
+      'userId': userId,
+      'previous_reading': previousReading,
+      'current_reading': currentReading,
+      'reading_date': readingDate,
+    };
+
+    // Send data to backend
+    final Uri url = Uri.parse('http://localhost/pure/generate_bill.php');
+    final response = await http.post(url, body: body);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData['success']) {
+        setState(() {
+          _isLoading = false;
+          _message = responseData['message'] ?? 'Bill generated successfully.';
+          _billAmount = responseData['billAmount'];
+          _unitsConsumed = responseData['unitsConsumed'];
+          _previousReading = responseData['previousReading'];
+          _currentReading = responseData['currentReading'];
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _message = responseData['message'] ?? 'Error generating the bill.';
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+        _message = 'Failed to connect to the server.';
+      });
+    }
+  }
+
+  // Build reusable TextField widget
+  Widget _buildTextField(String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        keyboardType: TextInputType.number,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,155 +107,59 @@ class BillPaymentScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _buildOutstandingBillCard(),
+            const Text(
+              'Enter Meter Reading Details:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            _buildTextField('User ID', _userIdController),
+            _buildTextField('Previous Reading', _previousReadingController),
+            _buildTextField('Current Reading', _currentReadingController),
+            _buildTextField('Reading Date (YYYY-MM-DD)', _readingDateController),
             const SizedBox(height: 20),
-            _buildPaymentOptions(context),
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+                    onPressed: _submitReading,
+                    child: const Text('Submit Reading'),
+                    style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
+                  ),
             const SizedBox(height: 20),
-            _buildPaymentHistory(),
+            if (_message.isNotEmpty)
+              Text(
+                _message,
+                style: TextStyle(
+                  color: _message == 'Please fill in all fields.' ? Colors.red : Colors.green,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            const SizedBox(height: 20),
+            if (_billAmount > 0)
+              Column(
+                children: [
+                  const Text(
+                    'Bill Summary',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('Previous Reading: $_previousReading'),
+                  Text('Current Reading: $_currentReading'),
+                  Text('Units Consumed: $_unitsConsumed'),
+                  Text('Total Bill Amount: \$$_billAmount'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add your payment gateway or payment logic here
+                    },
+                    child: const Text('Pay Bill'),
+                    style: ElevatedButton.styleFrom(primary: Colors.green),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
-    );
-  }
-
-  // Outstanding Bill Card with Billing Details
-  Widget _buildOutstandingBillCard() {
-    // Placeholder values for demonstration
-    final previousBalance = 150.00;
-    final previousReadingDate = 'September 1, 2024';
-    final previousMeterReading = 1000;
-    final currentReadingDate = 'October 1, 2024';
-    final currentMeterReading = 1050;
-    final unitCost = 150;
-    final standingCharge = 300;
-
-    // Calculated values
-    final consumedUnits = currentMeterReading - previousMeterReading;
-    final consumptionCost = consumedUnits * unitCost;
-    final totalDue = previousBalance + consumptionCost + standingCharge;
-    final dueDate = 'October 31, 2024';
-
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Outstanding Bill',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Previous Balance: Kshs. ${previousBalance.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Previous Reading: $previousMeterReading L ($previousReadingDate)',
-              style: const TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Current Reading: $currentMeterReading L ($currentReadingDate)',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Consumed Units: $consumedUnits @ Ksh $unitCost per unit',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Standing Charge: Kshs. $standingCharge',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const Divider(height: 20, thickness: 1),
-            Text(
-              'Total Amount Due: Kshs. ${totalDue.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 24, color: Colors.redAccent, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Due Date: $dueDate',
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Payment Options
-  Widget _buildPaymentOptions(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Payment Options',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            _buildPaymentOption(context, 'Pay via M-Pesa', Icons.phone_android, Colors.green, MpesaPaymentScreen()),
-            _buildPaymentOption(context, 'Pay via Credit/Debit Card', Icons.credit_card, Colors.blue, CardPaymentScreen()),
-            _buildPaymentOption(context, 'Pay via Bank Transfer', Icons.account_balance, Colors.orange, BankPaymentScreen()),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Payment Option
-  Widget _buildPaymentOption(BuildContext context, String title, IconData icon, Color color, Widget paymentPage) {
-    return ListTile(
-      leading: Icon(icon, size: 30, color: color),
-      title: Text(title, style: const TextStyle(fontSize: 18)),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 18),
-      onTap: () {
-        // Navigate to the respective payment page
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => paymentPage,
-          ),
-        );
-      },
-    );
-  }
-
-  // Payment History with statement for the last 12 months
-  Widget _buildPaymentHistory() {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Payment History (Last 12 Months)',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            _buildPaymentHistoryItem('October 1, 2024', 'Kshs. 1500.00', 'M-Pesa', 'Ref1234'),
-            _buildPaymentHistoryItem('September 1, 2024', 'Kshs. 1350.00', 'Bank Transfer', 'Ref5678'),
-            _buildPaymentHistoryItem('August 1, 2024', 'Kshs. 1400.00', 'Credit Card', 'Ref9101'),
-            // Add more historical records as needed
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Individual Payment History Item
-  Widget _buildPaymentHistoryItem(String date, String amount, String method, String reference) {
-    return ListTile(
-      title: Text(date, style: const TextStyle(fontSize: 16)),
-      subtitle: Text('$method - Ref: $reference', style: const TextStyle(fontSize: 14, color: Colors.grey)),
-      trailing: Text(amount, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
     );
   }
 }
