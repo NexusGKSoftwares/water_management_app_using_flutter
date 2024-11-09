@@ -28,28 +28,66 @@ class BillPaymentScreen extends StatelessWidget {
     );
   }
 
-  // Outstanding Bill Card
+  // Outstanding Bill Card with Billing Details
   Widget _buildOutstandingBillCard() {
-    return const Card(
+    // Placeholder values for demonstration
+    final previousBalance = 150.00;
+    final previousReadingDate = 'September 1, 2024';
+    final previousMeterReading = 1000;
+    final currentReadingDate = 'October 1, 2024';
+    final currentMeterReading = 1050;
+    final unitCost = 150;
+    final standingCharge = 300;
+
+    // Calculated values
+    final consumedUnits = currentMeterReading - previousMeterReading;
+    final consumptionCost = consumedUnits * unitCost;
+    final totalDue = previousBalance + consumptionCost + standingCharge;
+    final dueDate = 'October 31, 2024';
+
+    return Card(
       elevation: 5,
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Outstanding Bill',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
-              'Amount Due: Kshs. 50.00',
-              style: TextStyle(fontSize: 24, color: Colors.redAccent, fontWeight: FontWeight.bold),
+              'Previous Balance: Kshs. ${previousBalance.toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 10),
             Text(
-              'Due Date: October 31, 2024',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              'Previous Reading: $previousMeterReading L ($previousReadingDate)',
+              style: const TextStyle(fontSize: 16),
+            ),
+            Text(
+              'Current Reading: $currentMeterReading L ($currentReadingDate)',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Consumed Units: $consumedUnits @ Ksh $unitCost per unit',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Standing Charge: Kshs. $standingCharge',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const Divider(height: 20, thickness: 1),
+            Text(
+              'Total Amount Due: Kshs. ${totalDue.toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 24, color: Colors.redAccent, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Due Date: $dueDate',
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -98,7 +136,7 @@ class BillPaymentScreen extends StatelessWidget {
     );
   }
 
-  // Payment History
+  // Payment History with statement for the last 12 months
   Widget _buildPaymentHistory() {
     return Card(
       elevation: 5,
@@ -108,13 +146,14 @@ class BillPaymentScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Payment History',
+              'Payment History (Last 12 Months)',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            _buildPaymentHistoryItem('October 1, 2024', 'Kshs. 40.00', 'M-Pesa'),
-            _buildPaymentHistoryItem('September 1, 2024', 'Kshs. 35.00', 'Credit Card'),
-            _buildPaymentHistoryItem('August 1, 2024', 'Kshs. 45.00', 'Bank Transfer'),
+            _buildPaymentHistoryItem('October 1, 2024', 'Kshs. 1500.00', 'M-Pesa', 'Ref1234'),
+            _buildPaymentHistoryItem('September 1, 2024', 'Kshs. 1350.00', 'Bank Transfer', 'Ref5678'),
+            _buildPaymentHistoryItem('August 1, 2024', 'Kshs. 1400.00', 'Credit Card', 'Ref9101'),
+            // Add more historical records as needed
           ],
         ),
       ),
@@ -122,10 +161,10 @@ class BillPaymentScreen extends StatelessWidget {
   }
 
   // Individual Payment History Item
-  Widget _buildPaymentHistoryItem(String date, String amount, String method) {
+  Widget _buildPaymentHistoryItem(String date, String amount, String method, String reference) {
     return ListTile(
       title: Text(date, style: const TextStyle(fontSize: 16)),
-      subtitle: Text(method, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+      subtitle: Text('$method - Ref: $reference', style: const TextStyle(fontSize: 14, color: Colors.grey)),
       trailing: Text(amount, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
     );
   }
