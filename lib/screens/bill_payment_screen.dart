@@ -3,97 +3,44 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class BillPaymentScreen extends StatefulWidget {
-  const BillPaymentScreen({super.key});
+  final String userId;
+
+  const BillPaymentScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
   _BillPaymentScreenState createState() => _BillPaymentScreenState();
 }
 
 class _BillPaymentScreenState extends State<BillPaymentScreen> {
-  final _userIdController = TextEditingController();
-  final _previousReadingController = TextEditingController();
-  final _currentReadingController = TextEditingController();
-  final _readingDateController = TextEditingController();
+  late Future<Map<String, dynamic>> billData;
 
-  bool _isLoading = false;
-  String _message = '';
-  double _billAmount = 0.0;
-  int _unitsConsumed = 0;
-  int _previousReading = 0;
-  int _currentReading = 0;
+  // Replace with the actual URL for generating and fetching user bill details
+  final String _billUrl = 'http://localhost/pure/generate_bill.php';
 
-  // Submit reading and fetch bill details from the backend
-  Future<void> _submitReading() async {
-    setState(() {
-      _isLoading = true;
-      _message = '';
-    });
-
-    final String userId = _userIdController.text;
-    final String previousReading = _previousReadingController.text;
-    final String currentReading = _currentReadingController.text;
-    final String readingDate = _readingDateController.text;
-
-    // Validate inputs
-    if (userId.isEmpty || previousReading.isEmpty || currentReading.isEmpty || readingDate.isEmpty) {
-      setState(() {
-        _isLoading = false;
-        _message = 'Please fill in all fields.';
-      });
-      return;
-    }
-
-    // Create the request payload
-    final Map<String, String> body = {
-      'userId': userId,
-      'previous_reading': previousReading,
-      'current_reading': currentReading,
-      'reading_date': readingDate,
-    };
-
-    // Send data to backend
-    final Uri url = Uri.parse('http://localhost/pure/generate_bill.php');
-    final response = await http.post(url, body: body);
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-
-      if (responseData['success']) {
-        setState(() {
-          _isLoading = false;
-          _message = responseData['message'] ?? 'Bill generated successfully.';
-          _billAmount = responseData['billAmount'];
-          _unitsConsumed = responseData['unitsConsumed'];
-          _previousReading = responseData['previousReading'];
-          _currentReading = responseData['currentReading'];
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-          _message = responseData['message'] ?? 'Error generating the bill.';
-        });
-      }
-    } else {
-      setState(() {
-        _isLoading = false;
-        _message = 'Failed to connect to the server.';
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    billData = _fetchUserBill();
   }
 
-  // Build reusable TextField widget
-  Widget _buildTextField(String label, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
-        keyboardType: TextInputType.number,
-      ),
-    );
+  Future<Map<String, dynamic>> _fetchUserBill() async {
+    try {
+      final response = await http.get(Uri.parse('$_billUrl?userId=${widget.userId}'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        if (data['success']) {
+          return data['billDetails'];
+        } else {
+          throw Exception(data['message']);
+        }
+      } else {
+        throw Exception('Failed to load bill data');
+      }
+    } catch (e) {
+      print('Error fetching bill data: $e');
+      throw Exception('Failed to load bill data');
+    }
   }
 
   @override
@@ -103,63 +50,144 @@ class _BillPaymentScreenState extends State<BillPaymentScreen> {
         title: const Text('Bill Payment'),
         backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: billData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text('No bill data available'));
+          } else {
+            final bill = snapshot.data!;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildBillSummary(bill),
+                  const SizedBox(height: 20),
+                  _buildPaymentOptions(context),
+                  const SizedBox(height: 20),
+                  _buildPaymentHistory(bill['paymentHistory']),
+                ],
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildBillSummary(Map<String, dynamic> bill) {
+    return Card(
+      elevation: 5,
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Enter Meter Reading Details:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Billing Summary',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            _buildTextField('User ID', _userIdController),
-            _buildTextField('Previous Reading', _previousReadingController),
-            _buildTextField('Current Reading', _currentReadingController),
-            _buildTextField('Reading Date (YYYY-MM-DD)', _readingDateController),
-            const SizedBox(height: 20),
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : ElevatedButton(
-                    onPressed: _submitReading,
-                    child: const Text('Submit Reading'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-                  ),
-            const SizedBox(height: 20),
-            if (_message.isNotEmpty)
-              Text(
-                _message,
-                style: TextStyle(
-                  color: _message == 'Please fill in all fields.' ? Colors.red : Colors.green,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            const SizedBox(height: 20),
-            if (_billAmount > 0)
-              Column(
-                children: [
-                  const Text(
-                    'Bill Summary',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text('Previous Reading: $_previousReading'),
-                  Text('Current Reading: $_currentReading'),
-                  Text('Units Consumed: $_unitsConsumed'),
-                  Text('Total Bill Amount: \$$_billAmount'),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add your payment gateway or payment logic here
-                    },
-                    child: const Text('Pay Bill'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  ),
-                ],
+            _buildInfoRow('Previous Balance', 'Ksh ${bill['previous_balance']}'),
+            _buildInfoRow('Previous Reading', bill['previous_reading']),
+            _buildInfoRow('Current Reading', bill['current_reading']),
+            _buildInfoRow('Consumed Units', '${bill['consumed_units']} @ 150/unit'),
+            _buildInfoRow('Standing Charge', 'Ksh 300'),
+            const Divider(),
+            _buildInfoRow('Total Amount Due', 'Ksh ${bill['amount_due']}', isTotal: true),
+            const SizedBox(height: 10),
+            Text(
+              'Due Date: ${bill['due_date']}',
+              style: const TextStyle(fontSize: 16, color: Colors.redAccent),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentOptions(BuildContext context) {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Payment Options',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            _buildPaymentOption('Pay via M-Pesa', Icons.phone_android, Colors.green),
+            _buildPaymentOption('Pay via Credit/Debit Card', Icons.credit_card, Colors.blue),
+            _buildPaymentOption('Pay via Bank Transfer', Icons.account_balance, Colors.orange),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentHistory(List<dynamic> history) {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Payment History',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            for (var payment in history)
+              ListTile(
+                title: Text(payment['date']),
+                subtitle: Text(payment['method']),
+                trailing: Text('Ksh ${payment['amount']}'),
               ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(String title, String value, {bool isTotal = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontWeight: isTotal ? FontWeight.bold : FontWeight.normal),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              color: isTotal ? Colors.redAccent : Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentOption(String title, IconData icon, Color color) {
+    return ListTile(
+      leading: Icon(icon, color: color),
+      title: Text(title),
+      trailing: const Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        // Redirect to respective payment page
+      },
     );
   }
 }
