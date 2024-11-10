@@ -122,7 +122,7 @@ class _BillPaymentScreenState extends State<BillPaymentScreen> {
                 : ElevatedButton(
                     onPressed: _submitReading,
                     child: const Text('Submit Reading'),
-                    style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
                   ),
             const SizedBox(height: 20),
             if (_message.isNotEmpty)
@@ -153,7 +153,7 @@ class _BillPaymentScreenState extends State<BillPaymentScreen> {
                       // Add your payment gateway or payment logic here
                     },
                     child: const Text('Pay Bill'),
-                    style: ElevatedButton.styleFrom(primary: Colors.green),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   ),
                 ],
               ),
